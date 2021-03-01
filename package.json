@@ -1,6 +1,5 @@
 {
   "name": "best-route",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development nodemon --inspect=0.0.0.0:9222 index.js",
     "build": "npx tsc",
     "commit": "npx git-cz",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test INPUT_ROUTES_FILE_NAME='input-routes-test.csv' jest --runInBand"
   },
   "author": "Gio Cruz",
   "license": "ISC",
@@ -23,6 +22,7 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1"
   }

@@ -1,3 +1,3 @@
-import healthCheckRoutes from '../modules/healthcheck/healthcheck-routes.js';
+const healthCheckRoutes = require('../modules/healthcheck/healthcheck-routes');
 
-export default [healthCheckRoutes];
+module.exports = [healthCheckRoutes];

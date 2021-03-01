@@ -62,4 +62,4 @@ const validateObject = (object, schema) => {
   return [];
 };
 
-export { validateBody, validateParam, validateObject };
+module.exports = { validateBody, validateParam, validateObject };
