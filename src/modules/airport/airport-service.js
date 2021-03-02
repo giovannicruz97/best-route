@@ -14,26 +14,26 @@ const registerRoute = async ({ origin, destination, value }) => {
   }
 };
 
-const groupAirports = async ({ nodes }) => {
-  const possiblePaths = {};
+const groupAirports = async ({ rows }) => {
+  const nodes = {};
 
-  for (node of nodes) {
-    const [origin, destination, value] = node.split(',');
-    const newNode = {
+  for (row of rows) {
+    const [origin, destination, value] = row.split(',');
+    const newDestination = {
       [destination]: parseInt(value, 10),
     };
 
-    const nodeExists = !!possiblePaths[origin];
+    const nodeExists = !!nodes[origin];
     if (!nodeExists) {
-      possiblePaths[origin] = [newNode];
+      nodes[origin] = [newDestination];
     }
 
     if (nodeExists) {
-      possiblePaths[origin].push(newNode);
+      nodes[origin].push(newDestination);
     }
   }
 
-  return possiblePaths;
+  return nodes;
 };
 
 const extractAirpoirtsFromCsv = async () => {
@@ -45,7 +45,7 @@ const extractAirpoirtsFromCsv = async () => {
     const csvArray = csv.toString().split('\n');
     csvArray.pop();
 
-    return groupAirports({ nodes: csvArray });
+    return groupAirports({ rows: csvArray });
   } catch (err) {
     console.log(err);
   }
