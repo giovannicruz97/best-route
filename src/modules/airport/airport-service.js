@@ -14,4 +14,41 @@ const registerRoute = async ({ origin, destination, value }) => {
   }
 };
 
-module.exports = { registerRoute };
+const groupAirports = async ({ nodes }) => {
+  const possiblePaths = {};
+
+  for (node of nodes) {
+    const [origin, destination, value] = node.split(',');
+    const newNode = {
+      [destination]: parseInt(value, 10),
+    };
+
+    const nodeExists = !!possiblePaths[origin];
+    if (!nodeExists) {
+      possiblePaths[origin] = [newNode];
+    }
+
+    if (nodeExists) {
+      possiblePaths[origin].push(newNode);
+    }
+  }
+
+  return possiblePaths;
+};
+
+const extractAirpoirtsFromCsv = async () => {
+  try {
+    const csv = fs.readFileSync(
+      `${__dirname}/artifacts/${inputRoutesFileName}`
+    );
+
+    const csvArray = csv.toString().split('\n');
+    csvArray.pop();
+
+    return groupAirports({ nodes: csvArray });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { registerRoute, extractAirpoirtsFromCsv };

@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development nodemon --inspect=0.0.0.0:9222 index.js",
     "build": "npx tsc",
     "commit": "npx git-cz",
-    "test": "cross-env NODE_ENV=test INPUT_ROUTES_FILE_NAME='input-routes-test.csv' jest --runInBand"
+    "test": "cross-env NODE_ENV=test INPUT_ROUTES_FILE_NAME=input-routes-test.csv jest --runInBand"
   },
   "author": "Gio Cruz",
   "license": "ISC",
