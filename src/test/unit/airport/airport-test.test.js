@@ -7,19 +7,19 @@ const fs = require('fs');
 const { INPUT_ROUTES_FILE_NAME } = process.env;
 
 describe('Test airport-service functions', () => {
-  test('Test registerRoute()', async () => {
+  test('if registerRoute() registers the route to YYY from XXX costing 10', async () => {
     expect(
-      await registerRoute({ origin: 'XXX', destination: 'YYY', value: 10 })
-    ).toEqual('Route XXX to YYY for 10');
+      await registerRoute({ origin: 'XXX', destination: 'YYY', cost: 10 })
+    ).toEqual('XXX -> YYY: 10');
   });
 
-  test('Test extractAirpoirtsFromCsv()', async () => {
+  test('if extractAirpoirtsFromCsv() returns the airpoirts connections', async () => {
     expect(await extractAirpoirtsFromCsv()).toEqual({
       XXX: { YYY: 10 },
     });
   });
 
-  test('Test findBestRoute()', async () => {
+  test('if findBestRoute() gets the lowest cost and the used route', async () => {
     expect(
       await findBestRoute({
         origin: 'XXX',

@@ -3,12 +3,12 @@ const fs = require('fs');
 const inputRoutesFileName =
   process.env.INPUT_ROUTES_FILE_NAME || 'input-routes.csv';
 
-const registerRoute = async ({ origin, destination, value }) => {
+const registerRoute = async ({ origin, destination, cost }) => {
   try {
-    const line = `${origin},${destination},${value}\n`;
+    const line = `${origin},${destination},${cost}\n`;
     fs.appendFileSync(`${__dirname}/artifacts/${inputRoutesFileName}`, line);
 
-    return `Route ${origin} to ${destination} for ${value}`;
+    return `${origin} -> ${destination}: ${cost}`;
   } catch (err) {
     console.error(err);
   }
@@ -18,9 +18,9 @@ const groupAirports = async ({ rows }) => {
   const nodes = {};
 
   for (row of rows) {
-    const [origin, destination, value] = row.split(',');
+    const [origin, destination, cost] = row.split(',');
     const newDestination = {
-      [destination]: parseInt(value, 10),
+      [destination]: parseInt(cost, 10),
     };
 
     nodes[origin] = { ...nodes[origin], ...newDestination };
