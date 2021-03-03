@@ -6,7 +6,7 @@ const {
 const fs = require('fs');
 const { INPUT_ROUTES_FILE_NAME } = process.env;
 
-describe('Test airport-service functions', () => {
+describe('Test airport-service', () => {
   test('if registerRoute() registers the route to YYY from XXX costing 10', async () => {
     expect(
       await registerRoute({ origin: 'XXX', destination: 'YYY', cost: 10 })

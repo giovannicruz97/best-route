@@ -25,16 +25,27 @@ const registerRoute = async ({ origin, destination, cost, file = null }) => {
 const groupAirports = async ({ rows }) => {
   const nodes = {};
 
-  for (row of rows) {
-    const [origin, destination, cost] = row.split(',');
-    const newDestination = {
-      [destination]: parseInt(cost, 10),
-    };
+  try {
+    for (const [index, row] of rows.entries()) {
+      const [origin, destination, cost] = row.split(',');
 
-    nodes[origin] = { ...nodes[origin], ...newDestination };
+      if (!origin || !destination || !cost) {
+        throw new Error(`Row ${index + 1} is not separated by commas`);
+      }
+
+      const newDestination = {
+        [destination]: parseInt(cost, 10),
+      };
+
+      nodes[origin] = { ...nodes[origin], ...newDestination };
+    }
+
+    return nodes;
+  } catch (err) {
+    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+
+    return err;
   }
-
-  return nodes;
 };
 
 const extractAirpoirtsFromCsv = async ({ file = null }) => {
