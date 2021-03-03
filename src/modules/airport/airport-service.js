@@ -1,16 +1,24 @@
 const fs = require('fs');
+const path = require('path');
 
-const inputRoutesFileName =
+const defaultInputRoutesFileName =
   process.env.INPUT_ROUTES_FILE_NAME || 'input-routes.csv';
 
-const registerRoute = async ({ origin, destination, cost }) => {
+const registerRoute = async ({ origin, destination, cost, file = null }) => {
   try {
+    if (typeof cost != 'number') {
+      throw new Error('cost is not a number');
+    }
+
     const line = `${origin},${destination},${cost}\n`;
-    fs.appendFileSync(`${__dirname}/artifacts/${inputRoutesFileName}`, line);
+    const csv = file || `${__dirname}/artifacts/${defaultInputRoutesFileName}`;
+    fs.appendFileSync(csv, line);
 
     return `${origin} -> ${destination}: ${cost}`;
   } catch (err) {
-    console.error(err);
+    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+
+    return err;
   }
 };
 
@@ -29,18 +37,24 @@ const groupAirports = async ({ rows }) => {
   return nodes;
 };
 
-const extractAirpoirtsFromCsv = async () => {
+const extractAirpoirtsFromCsv = async ({ file = null }) => {
   try {
-    const csv = fs.readFileSync(
-      `${__dirname}/artifacts/${inputRoutesFileName}`
-    );
+    const csvFile =
+      file || `${__dirname}/artifacts/${defaultInputRoutesFileName}`;
 
+    if (path.extname(csvFile) !== '.csv') {
+      throw new Error('The given file is not a csv');
+    }
+
+    const csv = fs.readFileSync(csvFile);
     const csvArray = csv.toString().split('\n');
     csvArray.pop();
 
     return groupAirports({ rows: csvArray });
   } catch (err) {
-    console.log(err);
+    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+
+    return err;
   }
 };
 
@@ -60,8 +74,8 @@ const findLowestCostNode = (costs, processed) => {
   return lowestCostNode;
 };
 
-const findBestRoute = async ({ origin, destination }) => {
-  const airpoirts = await extractAirpoirtsFromCsv();
+const findBestRoute = async ({ origin, destination, file = null }) => {
+  const airpoirts = await extractAirpoirtsFromCsv({ file });
 
   // Set expected heuristic value
   const trackedCosts = {
@@ -107,10 +121,20 @@ const findBestRoute = async ({ origin, destination }) => {
   }
   bestRoute.reverse();
 
-  return {
-    cost: trackedCosts[destination],
-    route: bestRoute,
-  };
+  try {
+    if (trackedCosts[destination] === Infinity) {
+      throw new Error(`Route to ${destination} from ${origin} does not exist`);
+    }
+
+    return {
+      cost: trackedCosts[destination],
+      route: bestRoute,
+    };
+  } catch (err) {
+    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+
+    return err;
+  }
 };
 
 module.exports = { registerRoute, extractAirpoirtsFromCsv, findBestRoute };
