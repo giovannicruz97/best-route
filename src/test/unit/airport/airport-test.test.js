@@ -59,12 +59,14 @@ describe('Test airport-service', () => {
   });
 
   test('if findBestRoute() fails when route does not exist', async () => {
-    const error = await findBestRoute({
-      origin: 'WWW',
-      destination: 'TTE',
-    });
-
-    expect(error.message).toEqual('Route to TTE from WWW does not exist');
+    try {
+      await findBestRoute({
+        origin: 'WWW',
+        destination: 'TTE',
+      });
+    } catch (error) {
+      expect(error.message).toEqual('Route to TTE from WWW does not exist');
+    }
   });
 });
 

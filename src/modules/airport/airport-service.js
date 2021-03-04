@@ -132,20 +132,14 @@ const findBestRoute = async ({ origin, destination, file = null }) => {
   }
   bestRoute.reverse();
 
-  try {
-    if (trackedCosts[destination] === Infinity) {
-      throw new Error(`Route to ${destination} from ${origin} does not exist`);
-    }
-
-    return {
-      cost: trackedCosts[destination],
-      route: bestRoute,
-    };
-  } catch (err) {
-    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
-
-    return err;
+  if (trackedCosts[destination] === Infinity) {
+    throw new Error(`Route to ${destination} from ${origin} does not exist`);
   }
+
+  return {
+    cost: trackedCosts[destination],
+    route: bestRoute,
+  };
 };
 
 module.exports = { registerRoute, extractAirpoirtsFromCsv, findBestRoute };
