@@ -45,6 +45,10 @@ const chooseRoute = ({ file }) => {
         );
       } catch (err) {
         console.log(`😟 ${err.message}`);
+
+        if (err.message === 'File not found') {
+          process.exit();
+        }
       } finally {
         restart({ file });
       }

@@ -16,7 +16,7 @@ const registerRoute = async ({ origin, destination, cost, file = null }) => {
 
     return `${origin} -> ${destination}: ${cost}`;
   } catch (err) {
-    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+    process.env.TOGGLE_LOGS === 'on' ? console.error(err) : null;
 
     return err;
   }
@@ -42,7 +42,7 @@ const groupAirports = async ({ rows }) => {
 
     return nodes;
   } catch (err) {
-    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+    process.env.TOGGLE_LOGS === 'on' ? console.error(err) : null;
 
     return err;
   }
@@ -63,7 +63,10 @@ const extractAirpoirtsFromCsv = async ({ file = null }) => {
 
     return groupAirports({ rows: csvArray });
   } catch (err) {
-    process.env.NODE_ENV !== 'test' ? console.error(err) : null;
+    if (err.code === 'ENOENT') {
+      err.message = 'File not found';
+    }
+    process.env.TOGGLE_LOGS === 'on' ? console.error(err) : null;
 
     return err;
   }
@@ -87,6 +90,10 @@ const findLowestCostNode = (costs, processed) => {
 
 const findBestRoute = async ({ origin, destination, file = null }) => {
   const airpoirts = await extractAirpoirtsFromCsv({ file });
+
+  if (airpoirts instanceof Error) {
+    throw new Error(airpoirts.message);
+  }
 
   // Set expected heuristic value
   const trackedCosts = {
