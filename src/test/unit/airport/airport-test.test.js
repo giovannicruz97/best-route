@@ -2,6 +2,7 @@ const {
   registerRoute,
   extractAirpoirtsFromCsv,
   findBestRoute,
+  connectAirports,
 } = require('../../../modules/airport/airport-service');
 const fs = require('fs');
 const { INPUT_ROUTES_FILE_NAME } = process.env;
@@ -69,6 +70,19 @@ describe('Test airport-service', () => {
     } catch (error) {
       expect(error.message).toEqual('Route to TTE from WWW does not exist');
     }
+  });
+
+  test('if connectAirports() registers connections correctly', async () => {
+    expect(
+      await connectAirports({
+        airports: [
+          {
+            origin: 'GRU',
+            destinations: [{ destination: 'ORL', cost: 10 }],
+          },
+        ],
+      })
+    ).toEqual(['GRU -> ORL: 10']);
   });
 });
 

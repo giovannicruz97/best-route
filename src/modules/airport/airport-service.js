@@ -24,6 +24,30 @@ const getLastCsvFile = async () => {
   }
 };
 
+const connectAirports = async ({ airports }) => {
+  let connections = [];
+  for (airport of airports) {
+    const { origin, destinations } = airport;
+
+    const registeredConnections = await Promise.all(
+      destinations.map(
+        async ({ destination, cost }) =>
+          await registerRoute({
+            origin,
+            destination,
+            cost,
+          })
+      )
+    );
+
+    connections.push(registeredConnections);
+  }
+
+  connections.reverse();
+
+  return connections.flat();
+};
+
 const registerRoute = async ({ origin, destination, cost }) => {
   try {
     if (typeof cost != 'number') {
@@ -174,4 +198,9 @@ const findBestRoute = async ({ origin, destination, file = null }) => {
   };
 };
 
-module.exports = { registerRoute, extractAirpoirtsFromCsv, findBestRoute };
+module.exports = {
+  registerRoute,
+  extractAirpoirtsFromCsv,
+  findBestRoute,
+  connectAirports,
+};

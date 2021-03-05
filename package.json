@@ -15,7 +15,7 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "joi": "^17.4.0"
+    "express-joi-validation": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^7.21.0",
