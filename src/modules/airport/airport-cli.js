@@ -1,4 +1,5 @@
 const readline = require('readline');
+const fs = require('fs');
 const { findBestRoute } = require('./airport-service');
 
 const inputController = readline.createInterface({
@@ -56,10 +57,17 @@ const chooseRoute = ({ file }) => {
   );
 };
 
+const saveFilePath = ({ file }) => {
+  const database = `${__dirname}/artifacts/csvLocations.txt`;
+  const line = file ? `${file}\n` : `${__dirname}/artifacts/input-routes.csv\n`;
+  fs.appendFileSync(database, line);
+};
+
 (async () => {
   try {
     const [, , file] = process.argv;
     chooseRoute({ file });
+    saveFilePath({ file });
   } catch (err) {
     console.log(err.message);
     process.exit();

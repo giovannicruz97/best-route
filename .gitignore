@@ -1,2 +1,3 @@
 node_modules
 src/modules/airport/artifacts/*.csv
+src/modules/airport/artifacts/*.txt

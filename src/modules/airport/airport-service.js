@@ -4,14 +4,39 @@ const path = require('path');
 const defaultInputRoutesFileName =
   process.env.INPUT_ROUTES_FILE_NAME || 'input-routes.csv';
 
-const registerRoute = async ({ origin, destination, cost, file = null }) => {
+const getLastCsvFile = async () => {
+  try {
+    const csvLocations = fs.readFileSync(
+      `${__dirname}/artifacts/csvLocations.txt`
+    );
+    const lastCsvFileLocation = csvLocations.toString().split('\n').pop();
+
+    return !lastCsvFileLocation
+      ? `${__dirname}/artifacts/${defaultInputRoutesFileName}`
+      : lastCsvFileLocation;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      err.message = 'File not found';
+    }
+    process.env.TOGGLE_LOGS === 'on' ? console.error(err) : null;
+
+    return err;
+  }
+};
+
+const registerRoute = async ({ origin, destination, cost }) => {
   try {
     if (typeof cost != 'number') {
       throw new Error('cost is not a number');
     }
 
     const line = `${origin},${destination},${cost}\n`;
-    const csv = file || `${__dirname}/artifacts/${defaultInputRoutesFileName}`;
+    const csv = await getLastCsvFile();
+
+    if (csv instanceof Error) {
+      throw new Error(csv.message);
+    }
+
     fs.appendFileSync(csv, line);
 
     return `${origin} -> ${destination}: ${cost}`;
