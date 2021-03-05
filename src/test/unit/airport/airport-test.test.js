@@ -30,11 +30,13 @@ describe('Test airport-service', () => {
   });
 
   test('if extractAirportsFromCsv() fails when trying to read a not-existent or empty file', async () => {
-    const error = await extractAirpoirtsFromCsv({ file: 'sample.csv' });
-
-    expect(error.message).toEqual(
-      `ENOENT: no such file or directory, open 'sample.csv'`
-    );
+    try {
+      await extractAirpoirtsFromCsv({ file: 'sample.csv' });
+    } catch (error) {
+      expect(error.message).toEqual(
+        `ENOENT: no such file or directory, open 'sample.csv'`
+      );
+    }
   });
 
   test('if extractAirportsFromCsv() fails when trying to read a not-csv file', async () => {
