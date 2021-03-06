@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --inspect=0.0.0.0:9222 index.js",
+    "start": "node index.js",
     "build": "npx tsc",
     "commit": "npx git-cz",
     "test": "cross-env TOGGLE_LOGS=off INPUT_ROUTES_FILE_NAME=input-routes-test.csv jest --runInBand",
