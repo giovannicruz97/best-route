@@ -14,7 +14,7 @@ const getLastCsvFile = async () => {
     lastCsvFileLocation.pop();
     lastCsvFileLocation = lastCsvFileLocation.pop();
 
-    return !lastCsvFileLocation
+    return !lastCsvFileLocation || process.env.NODE_ENV === 'test'
       ? `${__dirname}/artifacts/${defaultInputRoutesFileName}`
       : lastCsvFileLocation;
   } catch (err) {
