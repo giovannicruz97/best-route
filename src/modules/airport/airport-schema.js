@@ -18,4 +18,9 @@ const createAirportConnectionsSchema = Joi.object({
     .required(),
 }).required();
 
-module.exports = { createAirportConnectionsSchema };
+const getBestRouteSchema = Joi.object({
+  origin: Joi.string().required(),
+  destination: Joi.string().required(),
+}).required();
+
+module.exports = { createAirportConnectionsSchema, getBestRouteSchema };

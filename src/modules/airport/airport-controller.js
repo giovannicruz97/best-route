@@ -1,5 +1,9 @@
 const { statusCodes } = require('../error/handler');
-const { connectAirports } = require('./airport-service');
+const {
+  connectAirports,
+  findBestRoute,
+  getLastCsvFile,
+} = require('./airport-service');
 
 const createAirportConnections = async (req, res) => {
   const { airports } = req.body;
@@ -19,4 +23,30 @@ const createAirportConnections = async (req, res) => {
   }
 };
 
-module.exports = { createAirportConnections };
+const getBestRoute = async (req, res) => {
+  const { origin, destination } = req.query;
+
+  try {
+    const lastCsvFile = await getLastCsvFile();
+    const { cost, route } = await findBestRoute({
+      origin,
+      destination,
+      file: lastCsvFile,
+    });
+
+    res.json({
+      data: {
+        bestRoute: {
+          cost,
+          route: route.join(' -> '),
+        },
+      },
+    });
+  } catch ({ message }) {
+    res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
+      message,
+    });
+  }
+};
+
+module.exports = { createAirportConnections, getBestRoute };

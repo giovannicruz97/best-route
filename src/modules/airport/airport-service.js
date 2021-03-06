@@ -9,7 +9,10 @@ const getLastCsvFile = async () => {
     const csvLocations = fs.readFileSync(
       `${__dirname}/artifacts/csvLocations.txt`
     );
-    const lastCsvFileLocation = csvLocations.toString().split('\n').pop();
+
+    let lastCsvFileLocation = csvLocations.toString().split('\n');
+    lastCsvFileLocation.pop();
+    lastCsvFileLocation = lastCsvFileLocation.pop();
 
     return !lastCsvFileLocation
       ? `${__dirname}/artifacts/${defaultInputRoutesFileName}`
@@ -203,4 +206,5 @@ module.exports = {
   extractAirpoirtsFromCsv,
   findBestRoute,
   connectAirports,
+  getLastCsvFile,
 };
