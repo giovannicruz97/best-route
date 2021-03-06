@@ -4,7 +4,7 @@
   <img src="https://media.giphy.com/media/rDroB384ydCvK/giphy.gif">
 </p>
 
-"Best Route" was built using Express with REST and CLI interfaces to find the cheapest route between two airports. This solution uses Dijkstra's algorithm to solve the "Shortest path problem". There are other possible algorithms to solve this kind of problem and can be found [here](https://en.wikipedia.org/wiki/Shortest_path_problem), but the Dijkstra's algorithm solves that with non-negative edge weight to find the best route. The weight between two nodes (airports) has to be positive, because the weight used here is the money.
+"Best Route" was built using Express with REST and CLI interfaces to find the cheapest route between two airports. This solution uses Dijkstra's algorithm to solve the "Shortest path problem". There are other possible algorithms to solve this kind of problem and can be found [here](https://en.wikipedia.org/wiki/Shortest_path_problem), but the Dijkstra's algorithm is the best choice when the weight between two nodes is positive.
 
 ## Requirements
 
