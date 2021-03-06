@@ -49,6 +49,14 @@ const connectAirports = async ({ airports }) => {
       destinations,
     });
 
+    const foundError = registeredConnections.find(
+      (connection) => connection instanceof Error
+    );
+
+    if (foundError) {
+      throw new Error(foundError.message);
+    }
+
     connections.push(registeredConnections);
   }
 
