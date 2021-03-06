@@ -27,21 +27,27 @@ const getLastCsvFile = async () => {
   }
 };
 
+const connectOriginToDestinations = async ({ origin, destinations }) =>
+  Promise.all(
+    destinations.map(
+      async ({ destination, cost }) =>
+        await registerRoute({
+          origin,
+          destination,
+          cost,
+        })
+    )
+  );
+
 const connectAirports = async ({ airports }) => {
   let connections = [];
   for (airport of airports) {
     const { origin, destinations } = airport;
 
-    const registeredConnections = await Promise.all(
-      destinations.map(
-        async ({ destination, cost }) =>
-          await registerRoute({
-            origin,
-            destination,
-            cost,
-          })
-      )
-    );
+    const registeredConnections = await connectOriginToDestinations({
+      origin,
+      destinations,
+    });
 
     connections.push(registeredConnections);
   }
