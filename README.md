@@ -52,7 +52,7 @@ After providing an input csv file, you're ready to use the the REST API to creat
 
 ### REST API
 
-All request were made using Postman. The API contracts can be found [here](https://documenter.getpostman.com/view/3700935/Tz5jf1T1). To run the REST API, please run: `npm start`
+All request were made using Postman. The API contracts can be found [here](https://documenter.getpostman.com/view/3700935/Tz5m8ewo). To run the REST API, please run: `npm start`
 
 ## Tests
 
